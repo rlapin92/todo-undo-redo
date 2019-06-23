@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Change Todo</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input cdkFocusInitial matInput [(ngModel)]="data">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [disabled]="!data" [mat-dialog-close]="data" (click)="dialogRef.close(data)" >Ok</button>
+</div>

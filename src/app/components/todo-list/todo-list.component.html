@@ -1,0 +1,4 @@
+<app-add-todo (add)="onAdd($event)"></app-add-todo>
+<app-todo-item (delete)="onDelete($event)" (update)="onUpdate($event)"
+
+               *ngFor="let item of (todos$ | async); trackBy: trackByFn" [item]="item"></app-todo-item>

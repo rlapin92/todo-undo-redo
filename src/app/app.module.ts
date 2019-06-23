@@ -1,16 +1,51 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
+import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { TodoItemComponent } from './components/todo-item/todo-item.component';
+import {NgrxModule} from './ngrx/ngrx.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule, MatRippleModule,
+  MatToolbarModule
+} from '@angular/material';
+import {FormsModule} from '@angular/forms';
+import { AddTodoComponent } from './components/add-todo/add-todo.component';
+import { UpdateDialogComponent } from './components/update-dialog/update-dialog.component';
+import { SettingsPaneComponent } from './components/settings-pane/settings-pane.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TodoListComponent,
+    TodoItemComponent,
+    AddTodoComponent,
+    UpdateDialogComponent,
+    SettingsPaneComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    NgrxModule,
+    MatCardModule,
+    MatToolbarModule,
+    BrowserAnimationsModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatInputModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatRippleModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [UpdateDialogComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

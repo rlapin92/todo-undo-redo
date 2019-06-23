@@ -1,0 +1,10 @@
+
+<mat-card>
+  <mat-form-field class="input">
+    <input (keydown.enter)="emitNewTodo()" matInput type="text" placeholder="New todo" [(ngModel)]="newTodoText">
+    <button mat-button *ngIf="newTodoText" matSuffix mat-icon-button aria-label="Clear" (click)="newTodoText=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <button [disabled]="!newTodoText" (click)="emitNewTodo()" mat-raised-button color="primary" class="button">+</button>
+</mat-card>

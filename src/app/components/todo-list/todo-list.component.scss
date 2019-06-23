@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  box-sizing: border-box;
+
+  app-todo-item, app-add-todo {
+    margin-bottom: 5px;
+    width: 100%;
+  }
+}

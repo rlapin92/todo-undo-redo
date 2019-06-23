@@ -136,5 +136,8 @@
       }
     }
   },
-  "defaultProject": "todo-undo-redo"
+  "defaultProject": "todo-undo-redo",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
