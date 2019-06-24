@@ -6,6 +6,7 @@ import {Todo} from './models/todo';
 import {takeUntil, tap} from 'rxjs/operators';
 import {AppState} from './ngrx/app.state';
 import {getCurrentTheme, getFontSize} from './ngrx/settings/settings.selectors';
+import {RedoAction, UndoAction} from './undo-redo/undo-redo.actions';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event']) keyDown(e: KeyboardEvent) {
     if (e.ctrlKey && e.code === 'KeyZ') {
-      alert(1);
+      this.store.dispatch(new UndoAction());
+    } else if (e.ctrlKey && e.code === 'KeyY') {
+      this.store.dispatch(new RedoAction());
     }
   }
 

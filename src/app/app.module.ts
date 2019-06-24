@@ -13,12 +13,13 @@ import {
   MatDialogModule,
   MatIconModule,
   MatInputModule, MatRippleModule,
-  MatToolbarModule
+  MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import { AddTodoComponent } from './components/add-todo/add-todo.component';
 import { UpdateDialogComponent } from './components/update-dialog/update-dialog.component';
 import { SettingsPaneComponent } from './components/settings-pane/settings-pane.component';
+import {UndoRedoModule} from './undo-redo/undo-redo.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,9 @@ import { SettingsPaneComponent } from './components/settings-pane/settings-pane.
     FormsModule,
     MatDialogModule,
     MatButtonModule,
-    MatRippleModule
+    MatTooltipModule,
+    MatRippleModule,
+    UndoRedoModule
   ],
   providers: [],
   bootstrap: [AppComponent],

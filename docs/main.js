@@ -61,6 +61,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _ngrx_settings_settings_selectors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ngrx/settings/settings.selectors */ "./src/app/ngrx/settings/settings.selectors.ts");
+/* harmony import */ var _undo_redo_undo_redo_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./undo-redo/undo-redo.actions */ "./src/app/undo-redo/undo-redo.actions.ts");
+
 
 
 
@@ -77,7 +79,10 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.keyDown = function (e) {
         if (e.ctrlKey && e.code === 'KeyZ') {
-            alert(1);
+            this.store.dispatch(new _undo_redo_undo_redo_actions__WEBPACK_IMPORTED_MODULE_6__["UndoAction"]());
+        }
+        else if (e.ctrlKey && e.code === 'KeyY') {
+            this.store.dispatch(new _undo_redo_undo_redo_actions__WEBPACK_IMPORTED_MODULE_6__["RedoAction"]());
         }
     };
     AppComponent.prototype.ngOnDestroy = function () {
@@ -143,6 +148,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_add_todo_add_todo_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/add-todo/add-todo.component */ "./src/app/components/add-todo/add-todo.component.ts");
 /* harmony import */ var _components_update_dialog_update_dialog_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/update-dialog/update-dialog.component */ "./src/app/components/update-dialog/update-dialog.component.ts");
 /* harmony import */ var _components_settings_pane_settings_pane_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/settings-pane/settings-pane.component */ "./src/app/components/settings-pane/settings-pane.component.ts");
+/* harmony import */ var _undo_redo_undo_redo_module__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./undo-redo/undo-redo.module */ "./src/app/undo-redo/undo-redo.module.ts");
+
 
 
 
@@ -181,7 +188,9 @@ var AppModule = /** @class */ (function () {
                 _angular_forms__WEBPACK_IMPORTED_MODULE_9__["FormsModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_8__["MatDialogModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_8__["MatButtonModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_8__["MatRippleModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_8__["MatTooltipModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_8__["MatRippleModule"],
+                _undo_redo_undo_redo_module__WEBPACK_IMPORTED_MODULE_13__["UndoRedoModule"]
             ],
             providers: [],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]],
@@ -268,7 +277,7 @@ var AddTodoComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div title=\"Switch theme\" matRipple  matRippleUnbounded=\"unbounded\" class=\"item theme-switcher primary\" (click)=\"switchTheme()\">\n\n</div>\n\n<mat-icon class=\"icon\" matRipple (click)=\"incFont()\"   matRippleUnbounded=\"unbounded\">\n  add\n</mat-icon>\n<mat-icon class=\"icon\" matRipple (click)=\"decFont()\" matRippleUnbounded=\"unbounded\">\n  remove\n</mat-icon>\n"
+module.exports = "<div title=\"Switch theme\" matRipple  matRippleUnbounded=\"unbounded\" class=\"item theme-switcher primary\" (click)=\"switchTheme()\">\n\n</div>\n\n<mat-icon class=\"icon\" matRipple (click)=\"incFont()\"   matRippleUnbounded=\"unbounded\">\n  add\n</mat-icon>\n<mat-icon class=\"icon\" matRipple (click)=\"decFont()\" matRippleUnbounded=\"unbounded\">\n  remove\n</mat-icon>\n<mat-icon class=\"icon\" [class.disabled]=\"!undoItem\" [matTooltip]=\"undoItem\" matRipple (click)=\"undo()\" matRippleUnbounded=\"unbounded\">\n  undo\n</mat-icon>\n<mat-icon class=\"icon\"  [class.disabled]=\"!redoItem\" [matTooltip]=\"redoItem\" matRipple (click)=\"redo()\" matRippleUnbounded=\"unbounded\">\n  redo\n</mat-icon>\n"
 
 /***/ }),
 
@@ -279,7 +288,7 @@ module.exports = "<div title=\"Switch theme\" matRipple  matRippleUnbounded=\"un
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  display: -webkit-flex;\n  display: flex;\n  -webkit-flex-direction: row;\n          flex-direction: row;\n  -webkit-justify-content: flex-end;\n          justify-content: flex-end;\n  -webkit-align-items: flex-end;\n          align-items: flex-end; }\n  :host .item {\n    width: 24px;\n    height: 24px;\n    border: 1px solid; }\n  :host .icon {\n    width: 24px;\n    margin-left: 5px;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: pointer;\n    font-size: 1.2em; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9zZXR0aW5ncy1wYW5lL0M6XFxwcm9qZWN0c1xcYW5ndWxhclxcdG9kby11bmRvLXJlZG8vc3JjXFxhcHBcXGNvbXBvbmVudHNcXHNldHRpbmdzLXBhbmVcXHNldHRpbmdzLXBhbmUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxxQkFBYTtFQUFiLGFBQWE7RUFDYiwyQkFBbUI7VUFBbkIsbUJBQW1CO0VBQ25CLGlDQUF5QjtVQUF6Qix5QkFBeUI7RUFDekIsNkJBQXFCO1VBQXJCLHFCQUFxQixFQUFBO0VBSnZCO0lBTUksV0FBVztJQUNYLFlBQVk7SUFDWixpQkFBaUIsRUFBQTtFQVJyQjtJQVlJLFdBQVc7SUFDWCxnQkFBZ0I7SUFDaEIseUJBQXlCO0lBQ3pCLHNCQUFzQjtJQUN0QixxQkFBcUI7SUFDckIsaUJBQWlCO0lBQ2pCLGVBQWU7SUFDZixnQkFBZ0IsRUFBQSIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvc2V0dGluZ3MtcGFuZS9zZXR0aW5ncy1wYW5lLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiOmhvc3R7XHJcbiAgZGlzcGxheTogZmxleDtcclxuICBmbGV4LWRpcmVjdGlvbjogcm93O1xyXG4gIGp1c3RpZnktY29udGVudDogZmxleC1lbmQ7XHJcbiAgYWxpZ24taXRlbXM6IGZsZXgtZW5kO1xyXG4gIC5pdGVte1xyXG4gICAgd2lkdGg6IDI0cHg7XHJcbiAgICBoZWlnaHQ6IDI0cHg7XHJcbiAgICBib3JkZXI6IDFweCBzb2xpZDtcclxuICB9XHJcblxyXG4gIC5pY29uIHtcclxuICAgIHdpZHRoOiAyNHB4O1xyXG4gICAgbWFyZ2luLWxlZnQ6IDVweDtcclxuICAgIC13ZWJraXQtdXNlci1zZWxlY3Q6IG5vbmU7XHJcbiAgICAtbW96LXVzZXItc2VsZWN0OiBub25lO1xyXG4gICAgLW1zLXVzZXItc2VsZWN0OiBub25lO1xyXG4gICAgdXNlci1zZWxlY3Q6IG5vbmU7XHJcbiAgICBjdXJzb3I6IHBvaW50ZXI7XHJcbiAgICBmb250LXNpemU6IDEuMmVtO1xyXG4gIH1cclxuXHJcbn1cclxuIl19 */"
+module.exports = ":host {\n  display: -webkit-flex;\n  display: flex;\n  -webkit-flex-direction: row;\n          flex-direction: row;\n  -webkit-justify-content: flex-end;\n          justify-content: flex-end;\n  -webkit-align-items: flex-end;\n          align-items: flex-end; }\n  :host .item {\n    width: 24px;\n    height: 24px;\n    border: 1px solid; }\n  :host .icon {\n    width: 24px;\n    margin-left: 5px;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: pointer;\n    font-size: 1.2em; }\n  :host .icon.disabled {\n      pointer-events: none;\n      opacity: 0.1; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9zZXR0aW5ncy1wYW5lL0M6XFxwcm9qZWN0c1xcYW5ndWxhclxcdG9kby11bmRvLXJlZG8vc3JjXFxhcHBcXGNvbXBvbmVudHNcXHNldHRpbmdzLXBhbmVcXHNldHRpbmdzLXBhbmUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxxQkFBYTtFQUFiLGFBQWE7RUFDYiwyQkFBbUI7VUFBbkIsbUJBQW1CO0VBQ25CLGlDQUF5QjtVQUF6Qix5QkFBeUI7RUFDekIsNkJBQXFCO1VBQXJCLHFCQUFxQixFQUFBO0VBSnZCO0lBTUksV0FBVztJQUNYLFlBQVk7SUFDWixpQkFBaUIsRUFBQTtFQVJyQjtJQVlJLFdBQVc7SUFDWCxnQkFBZ0I7SUFDaEIseUJBQXlCO0lBQ3pCLHNCQUFzQjtJQUN0QixxQkFBcUI7SUFDckIsaUJBQWlCO0lBQ2pCLGVBQWU7SUFDZixnQkFBZ0IsRUFBQTtFQW5CcEI7TUFxQk0sb0JBQW9CO01BQ3BCLFlBQVksRUFBQSIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvc2V0dGluZ3MtcGFuZS9zZXR0aW5ncy1wYW5lLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiOmhvc3R7XHJcbiAgZGlzcGxheTogZmxleDtcclxuICBmbGV4LWRpcmVjdGlvbjogcm93O1xyXG4gIGp1c3RpZnktY29udGVudDogZmxleC1lbmQ7XHJcbiAgYWxpZ24taXRlbXM6IGZsZXgtZW5kO1xyXG4gIC5pdGVte1xyXG4gICAgd2lkdGg6IDI0cHg7XHJcbiAgICBoZWlnaHQ6IDI0cHg7XHJcbiAgICBib3JkZXI6IDFweCBzb2xpZDtcclxuICB9XHJcblxyXG4gIC5pY29uIHtcclxuICAgIHdpZHRoOiAyNHB4O1xyXG4gICAgbWFyZ2luLWxlZnQ6IDVweDtcclxuICAgIC13ZWJraXQtdXNlci1zZWxlY3Q6IG5vbmU7XHJcbiAgICAtbW96LXVzZXItc2VsZWN0OiBub25lO1xyXG4gICAgLW1zLXVzZXItc2VsZWN0OiBub25lO1xyXG4gICAgdXNlci1zZWxlY3Q6IG5vbmU7XHJcbiAgICBjdXJzb3I6IHBvaW50ZXI7XHJcbiAgICBmb250LXNpemU6IDEuMmVtO1xyXG4gICAgJi5kaXNhYmxlZHtcclxuICAgICAgcG9pbnRlci1ldmVudHM6IG5vbmU7XHJcbiAgICAgIG9wYWNpdHk6IDAuMTtcclxuICAgIH1cclxuICB9XHJcblxyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -297,6 +306,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _ngrx_settings_settings_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../ngrx/settings/settings.actions */ "./src/app/ngrx/settings/settings.actions.ts");
+/* harmony import */ var _undo_redo_undo_redo_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../undo-redo/undo-redo.actions */ "./src/app/undo-redo/undo-redo.actions.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _undo_redo_undo_redo_selectors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../undo-redo/undo-redo.selectors */ "./src/app/undo-redo/undo-redo.selectors.ts");
+
+
+
+
 
 
 
@@ -304,8 +321,16 @@ __webpack_require__.r(__webpack_exports__);
 var SettingsPaneComponent = /** @class */ (function () {
     function SettingsPaneComponent(store) {
         this.store = store;
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_5__["Subject"]();
     }
     SettingsPaneComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["select"])(_undo_redo_undo_redo_selectors__WEBPACK_IMPORTED_MODULE_7__["getUndoAction"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe$)).subscribe(function (undoItem) {
+            _this.undoItem = undoItem;
+        });
+        this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["select"])(_undo_redo_undo_redo_selectors__WEBPACK_IMPORTED_MODULE_7__["getRedoAction"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe$)).subscribe(function (redoItem) {
+            _this.redoItem = redoItem;
+        });
     };
     SettingsPaneComponent.prototype.switchTheme = function () {
         this.store.dispatch(new _ngrx_settings_settings_actions__WEBPACK_IMPORTED_MODULE_3__["ChangeThemeAction"]());
@@ -315,6 +340,16 @@ var SettingsPaneComponent = /** @class */ (function () {
     };
     SettingsPaneComponent.prototype.decFont = function () {
         this.store.dispatch(new _ngrx_settings_settings_actions__WEBPACK_IMPORTED_MODULE_3__["DecFontAction"]());
+    };
+    SettingsPaneComponent.prototype.undo = function () {
+        this.store.dispatch(new _undo_redo_undo_redo_actions__WEBPACK_IMPORTED_MODULE_4__["UndoAction"]());
+    };
+    SettingsPaneComponent.prototype.redo = function () {
+        this.store.dispatch(new _undo_redo_undo_redo_actions__WEBPACK_IMPORTED_MODULE_4__["RedoAction"]());
+    };
+    SettingsPaneComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
     };
     SettingsPaneComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -338,7 +373,7 @@ var SettingsPaneComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card (click)=\"$event.preventDefault(); update.emit({id: item.id , changes: {done: !item.done}})\">\n  <mat-checkbox color=\"primary\" [checked]=\"item.done\"></mat-checkbox>\n  <span class=\"title\">{{item.title}}</span>\n  <mat-icon (click)=\"$event.stopPropagation(); showEditDialog()\" class=\"icon clickable\">edit</mat-icon>\n  <mat-icon (click)=\"delete.emit(item.id)\" class=\"icon clickable\">delete</mat-icon>\n</mat-card>\n"
+module.exports = "<mat-card>\n  <mat-checkbox (click)=\"$event.preventDefault(); update.emit({id: item.id , changes: {done: !item.done}})\" color=\"primary\" [checked]=\"item.done\"></mat-checkbox>\n  <span class=\"title\">{{item.title}}</span>\n  <mat-icon (click)=\"$event.stopPropagation(); showEditDialog()\" class=\"icon clickable\">edit</mat-icon>\n  <mat-icon (click)=\"delete.emit(item.id)\" class=\"icon clickable\">delete</mat-icon>\n</mat-card>\n"
 
 /***/ }),
 
@@ -607,6 +642,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 /* harmony import */ var _app_reducers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.reducers */ "./src/app/ngrx/app.reducers.ts");
+/* harmony import */ var _undo_redo_undo_redo_meta__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../undo-redo/undo-redo.meta */ "./src/app/undo-redo/undo-redo.meta.ts");
+
 
 
 
@@ -623,7 +660,7 @@ var NgrxModule = /** @class */ (function () {
             declarations: [],
             imports: [
                 _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
-                _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["StoreModule"].forRoot(_app_reducers__WEBPACK_IMPORTED_MODULE_7__["appReducer"]),
+                _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["StoreModule"].forRoot(_app_reducers__WEBPACK_IMPORTED_MODULE_7__["appReducer"], { metaReducers: [_undo_redo_undo_redo_meta__WEBPACK_IMPORTED_MODULE_8__["undoredoMeta"]] }),
                 _ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["EffectsModule"].forRoot([]),
                 _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_5__["StoreDevtoolsModule"].instrument({ maxAge: 25, logOnly: _environments_environment__WEBPACK_IMPORTED_MODULE_6__["environment"].production })
             ]
@@ -854,6 +891,300 @@ __webpack_require__.r(__webpack_exports__);
 
 var getTodoState = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["createFeatureSelector"])('todos');
 var selectAll = _todo_reducer__WEBPACK_IMPORTED_MODULE_0__["todoAdapter"].getSelectors(getTodoState).selectAll;
+
+
+/***/ }),
+
+/***/ "./src/app/undo-redo/undo-redo.actions.ts":
+/*!************************************************!*\
+  !*** ./src/app/undo-redo/undo-redo.actions.ts ***!
+  \************************************************/
+/*! exports provided: UndoRedoActionTypes, UndoAction, RedoAction, AddAction */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UndoRedoActionTypes", function() { return UndoRedoActionTypes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UndoAction", function() { return UndoAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RedoAction", function() { return RedoAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddAction", function() { return AddAction; });
+var UndoRedoActionTypes;
+(function (UndoRedoActionTypes) {
+    UndoRedoActionTypes["UNDO"] = "[UndoRedo] Undo action";
+    UndoRedoActionTypes["REDO"] = "[UndoRedo] Redo action";
+    UndoRedoActionTypes["ADD"] = "[UndoRedo] Add action";
+})(UndoRedoActionTypes || (UndoRedoActionTypes = {}));
+var UndoAction = /** @class */ (function () {
+    /**
+     * If specifies undo to specific action(0 - first action that was done), otherwise undo to previous action
+     * @param index index in the states array to undo to the specific state if specified
+     */
+    function UndoAction(index) {
+        this.index = index;
+        this.type = UndoRedoActionTypes.UNDO;
+    }
+    return UndoAction;
+}());
+
+var RedoAction = /** @class */ (function () {
+    /**
+     * If specifies redo to specific action(0 - first action that was undone), otherwise undo to next action
+     * @param index index in the states array to redo to the specific state if specified
+     */
+    function RedoAction(index) {
+        this.index = index;
+        this.type = UndoRedoActionTypes.REDO;
+    }
+    return RedoAction;
+}());
+
+var AddAction = /** @class */ (function () {
+    function AddAction(payload) {
+        this.payload = payload;
+        this.type = UndoRedoActionTypes.ADD;
+    }
+    return AddAction;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/undo-redo/undo-redo.meta.ts":
+/*!*********************************************!*\
+  !*** ./src/app/undo-redo/undo-redo.meta.ts ***!
+  \*********************************************/
+/*! exports provided: undoredoMeta */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "undoredoMeta", function() { return undoredoMeta; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./undo-redo.actions */ "./src/app/undo-redo/undo-redo.actions.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _undoable_operations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./undoable-operations */ "./src/app/undo-redo/undoable-operations.ts");
+
+
+
+
+var PERSISTENT_KEYS = ['todos', 'settings.fontSize'];
+function undoredoMeta(reducer) {
+    var states = {
+        past: [],
+        present: reducer(undefined, { type: '__INIT__' }),
+        future: []
+    };
+    return function (state, action) {
+        var past = states.past, present = states.present, future = states.future;
+        function onUndo() {
+            if (past.length === 0) {
+                return state;
+            }
+            var previous = past[past.length - 1];
+            var newPast = past.slice(0, past.length - 1);
+            states = {
+                past: newPast,
+                present: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, previous, { undoredo: state.undoredo }),
+                future: [present].concat(future)
+            };
+            return reducer(mergeStates(state, states.present), action);
+        }
+        function onRedo() {
+            if (future.length === 0) {
+                return state;
+            }
+            var next = future[0];
+            var newFuture = future.slice(1);
+            states = {
+                past: past.concat([present]),
+                present: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, next, { undoredo: state.undoredo }),
+                future: newFuture
+            };
+            return reducer(mergeStates(state, states.present), action);
+        }
+        switch (action.type) {
+            case _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__["UndoRedoActionTypes"].UNDO:
+                return onUndo();
+            case _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__["UndoRedoActionTypes"].REDO:
+                return onRedo();
+            default:
+                // Delegate handling the action to the passed reducer
+                var persistentAction = _undoable_operations__WEBPACK_IMPORTED_MODULE_3__["UNDOABLE_OPERATIONS"].find(function (item) { return item.type === action.type; });
+                if (persistentAction) {
+                    var newPresent = reducer(state, action);
+                    if (present === newPresent) {
+                        return state;
+                    }
+                    states = {
+                        past: past.concat([present]),
+                        present: extractState(newPresent),
+                        future: []
+                    };
+                    return reducer(newPresent, new _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__["AddAction"](persistentAction.hint || persistentAction.type));
+                }
+                else {
+                    var newState = reducer(state, action);
+                    states = tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, states, { present: extractState(newState) });
+                    return newState;
+                }
+        }
+    };
+}
+/**
+ * Retrieves persistable part of the state.
+ * @param state application state
+ */
+function extractState(state) {
+    return Object(lodash__WEBPACK_IMPORTED_MODULE_2__["pick"])(state, PERSISTENT_KEYS);
+}
+/**
+ * Merge appstate with undoable part
+ * @param state app state
+ * @param undoablePart part of the state that was persisted
+ */
+function mergeStates(state, undoablePart) {
+    var newState = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["cloneDeep"])(state);
+    PERSISTENT_KEYS.forEach(function (key) { return Object(lodash__WEBPACK_IMPORTED_MODULE_2__["set"])(newState, key, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(undoablePart, key)); });
+    return newState;
+}
+
+
+/***/ }),
+
+/***/ "./src/app/undo-redo/undo-redo.module.ts":
+/*!***********************************************!*\
+  !*** ./src/app/undo-redo/undo-redo.module.ts ***!
+  \***********************************************/
+/*! exports provided: UndoRedoModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UndoRedoModule", function() { return UndoRedoModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _undo_redo_reducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./undo-redo.reducer */ "./src/app/undo-redo/undo-redo.reducer.ts");
+
+
+
+
+
+var UndoRedoModule = /** @class */ (function () {
+    function UndoRedoModule() {
+    }
+    UndoRedoModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [],
+            imports: [
+                _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
+                _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["StoreModule"].forFeature('undoredo', _undo_redo_reducer__WEBPACK_IMPORTED_MODULE_4__["undoredoReducer"])
+            ]
+        })
+    ], UndoRedoModule);
+    return UndoRedoModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/undo-redo/undo-redo.reducer.ts":
+/*!************************************************!*\
+  !*** ./src/app/undo-redo/undo-redo.reducer.ts ***!
+  \************************************************/
+/*! exports provided: undoredoReducer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "undoredoReducer", function() { return undoredoReducer; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./undo-redo.actions */ "./src/app/undo-redo/undo-redo.actions.ts");
+
+
+var initialState = {
+    undoActions: [],
+    redoActions: []
+};
+function undoredoReducer(state, action) {
+    if (state === void 0) { state = initialState; }
+    switch (action.type) {
+        case _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__["UndoRedoActionTypes"].REDO:
+            return redo(state, action);
+        case _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__["UndoRedoActionTypes"].UNDO:
+            return undo(state, action);
+        case _undo_redo_actions__WEBPACK_IMPORTED_MODULE_1__["UndoRedoActionTypes"].ADD:
+            return add(state, action);
+        default:
+            return state;
+    }
+}
+function redo(state, action) {
+    if (state.redoActions.length === 0) {
+        return state;
+    }
+    return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { undoActions: state.undoActions.concat([state.redoActions[0]]), redoActions: state.redoActions.slice(1) });
+}
+function undo(state, action) {
+    if (state.undoActions.length === 0) {
+        return state;
+    }
+    return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { undoActions: state.undoActions.slice(0, state.undoActions.length - 1), redoActions: [state.undoActions[state.undoActions.length - 1]].concat(state.redoActions) });
+}
+function add(state, action) {
+    return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { undoActions: state.undoActions.concat([action.payload]), redoActions: [] });
+}
+
+
+/***/ }),
+
+/***/ "./src/app/undo-redo/undo-redo.selectors.ts":
+/*!**************************************************!*\
+  !*** ./src/app/undo-redo/undo-redo.selectors.ts ***!
+  \**************************************************/
+/*! exports provided: getUndoAction, getRedoAction */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUndoAction", function() { return getUndoAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRedoAction", function() { return getRedoAction; });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+
+var selectUndoredoState = function (state) { return state.undoredo; };
+var getUndoAction = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectUndoredoState, function (state) { return state.undoActions.length > 0
+    && state.undoActions[state.undoActions.length - 1]; });
+var getRedoAction = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectUndoredoState, function (state) { return state.redoActions.length > 0
+    && state.redoActions[0]; });
+
+
+/***/ }),
+
+/***/ "./src/app/undo-redo/undoable-operations.ts":
+/*!**************************************************!*\
+  !*** ./src/app/undo-redo/undoable-operations.ts ***!
+  \**************************************************/
+/*! exports provided: UNDOABLE_OPERATIONS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNDOABLE_OPERATIONS", function() { return UNDOABLE_OPERATIONS; });
+/* harmony import */ var _ngrx_todo_todo_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ngrx/todo/todo.actions */ "./src/app/ngrx/todo/todo.actions.ts");
+/* harmony import */ var _ngrx_settings_settings_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ngrx/settings/settings.actions */ "./src/app/ngrx/settings/settings.actions.ts");
+
+
+var UNDOABLE_OPERATIONS = [
+    { hint: 'Update todo', type: _ngrx_todo_todo_actions__WEBPACK_IMPORTED_MODULE_0__["TodoActionTypes"].UPDATE },
+    { hint: 'Add todo', type: _ngrx_todo_todo_actions__WEBPACK_IMPORTED_MODULE_0__["TodoActionTypes"].ADD },
+    { hint: 'Remove todo', type: _ngrx_todo_todo_actions__WEBPACK_IMPORTED_MODULE_0__["TodoActionTypes"].DELETE },
+    { hint: 'Decrease font size', type: _ngrx_settings_settings_actions__WEBPACK_IMPORTED_MODULE_1__["SettingsActionTypes"].DEC_FONT },
+    { hint: 'Increase font size', type: _ngrx_settings_settings_actions__WEBPACK_IMPORTED_MODULE_1__["SettingsActionTypes"].INC_FONT },
+];
 
 
 /***/ }),

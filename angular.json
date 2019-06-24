@@ -138,6 +138,5 @@
   },
   "defaultProject": "todo-undo-redo",
   "cli": {
-    "defaultCollection": "@ngrx/schematics"
   }
 }

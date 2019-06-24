@@ -1,5 +1,5 @@
-<mat-card (click)="$event.preventDefault(); update.emit({id: item.id , changes: {done: !item.done}})">
-  <mat-checkbox color="primary" [checked]="item.done"></mat-checkbox>
+<mat-card>
+  <mat-checkbox (click)="$event.preventDefault(); update.emit({id: item.id , changes: {done: !item.done}})" color="primary" [checked]="item.done"></mat-checkbox>
   <span class="title">{{item.title}}</span>
   <mat-icon (click)="$event.stopPropagation(); showEditDialog()" class="icon clickable">edit</mat-icon>
   <mat-icon (click)="delete.emit(item.id)" class="icon clickable">delete</mat-icon>

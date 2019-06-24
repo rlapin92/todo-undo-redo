@@ -8,3 +8,9 @@
 <mat-icon class="icon" matRipple (click)="decFont()" matRippleUnbounded="unbounded">
   remove
 </mat-icon>
+<mat-icon class="icon" [class.disabled]="!undoItem" [matTooltip]="undoItem" matRipple (click)="undo()" matRippleUnbounded="unbounded">
+  undo
+</mat-icon>
+<mat-icon class="icon"  [class.disabled]="!redoItem" [matTooltip]="redoItem" matRipple (click)="redo()" matRippleUnbounded="unbounded">
+  redo
+</mat-icon>
